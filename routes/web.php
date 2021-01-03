@@ -18,7 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::post('login', [Login::class, 'authenticate']);
-
+Route::get('oauthAgree', [Login::class, 'oauthAgree'])->name('oauthAgree');
+Route::get('oauthLogin', [Login::class, 'oauthLogin']);
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
