@@ -19,22 +19,8 @@ class Login extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
-    public function oauthLogin(Request $request)
+    public function oauthLogin()
     {
-        // dd(Socialite::driver('google')->stateless()->user());
-        $user = Socialite::driver('google')->stateless()->user();
-        $email = $user->getEmail();
-        $name = $user->name;
-
-        if (!User::where('email', $email)->first()) {
-            User::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => 'oauthLogin'
-            ]);
-        }
-        $user = User::where('email', $email)->first();
-        Auth::login($user);
-        return redirect()->intended('dashboard');
+        return app('LoginService')->oauthLogin();
     }
 }

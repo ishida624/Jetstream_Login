@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
+
 
 class LoginService
 {
@@ -31,5 +33,22 @@ class LoginService
                 'email' => 'The provided credentials do not match our records.',
             ]);
         }
+    }
+    public function oauthLogin()
+    {
+        # code...
+        $user = Socialite::driver('google')->stateless()->user();
+        $email = $user->getEmail();
+        $name = $user->name;
+        if (!User::where('email', $email)->first()) {
+            User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => 'oauthLogin'
+            ]);
+        }
+        $user = User::where('email', $email)->first();
+        Auth::login($user);
+        return redirect()->intended('dashboard');
     }
 }
