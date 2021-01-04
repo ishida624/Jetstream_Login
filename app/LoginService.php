@@ -48,6 +48,11 @@ class LoginService
             ]);
         }
         $user = User::where('email', $email)->first();
+        if ($user->password != 'oauthLogin') {
+            return back()->withErrors([
+                'email' => 'This account already exist',
+            ]);
+        }
         Auth::login($user);
         return redirect()->intended('dashboard');
     }
