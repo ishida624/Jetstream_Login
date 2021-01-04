@@ -50,7 +50,7 @@ class LoginService
         $user = User::where('email', $email)->first();
         if ($user->password != 'oauthLogin') {
             return back()->withErrors([
-                'email' => 'This account already exist',
+                'email' => $email . 'This account already exist',
             ]);
         }
         Auth::login($user);
